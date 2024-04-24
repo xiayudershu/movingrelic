@@ -174,6 +174,11 @@ public class FrontendController {
         return Result.success(lostService.getLostDetail(lostCreationId));
     }
 
+    @PostMapping("/gettargetlost")
+    public Result GetTargetLost(@RequestBody SearchLost searchLost){
+        return Result.success(lostService.GetTargetLosts(searchLost));
+    }
+
     @PostMapping("/addlostcomment")
     public Result AddLostComment(@RequestBody AddLostComment addLostComment){
         return Result.success(lostService.AddLostComment(addLostComment));

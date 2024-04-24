@@ -13,12 +13,15 @@ import org.xiayudeshu.pojo.entity.PostCommentData;
 import org.xiayudeshu.pojo.entity.PostData;
 import org.xiayudeshu.pojo.vo.CreationDetail;
 import org.xiayudeshu.pojo.vo.Creations;
+import org.xiayudeshu.pojo.vo.Losts;
 import org.xiayudeshu.pojo.vo.PostDetail;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CreationService {
@@ -74,7 +77,11 @@ public class CreationService {
                 creations.add(creation);
             }
         }
-        return creations;
+        List<Creations> sortedCreations = creations.stream()
+                .sorted(Comparator.comparing(Creations::getFavoriteNum).reversed())
+                .collect(Collectors.toList());
+
+        return sortedCreations;
     }
 
     public List<Creations> GetTargetCreations(SearchCreation searchCreation){
@@ -97,7 +104,11 @@ public class CreationService {
                 creations.add(creation);
             }
         }
-        return creations;
+        List<Creations> sortedCreations = creations.stream()
+                .sorted(Comparator.comparing(Creations::getFavoriteNum).reversed())
+                .collect(Collectors.toList());
+
+        return sortedCreations;
     }
 
     public CreationDetail getCreationDetail(Long creationId){

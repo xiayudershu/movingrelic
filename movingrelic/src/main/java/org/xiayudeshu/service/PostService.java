@@ -13,8 +13,10 @@ import org.xiayudeshu.pojo.vo.Posts;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -77,7 +79,11 @@ public class PostService {
             posts.add(post);
 
         }
-        return posts;
+        List<Posts> sortedPosts = posts.stream()
+                .sorted(Comparator.comparing(Posts::getFavoriteNum).reversed())
+                .collect(Collectors.toList());
+
+        return sortedPosts;
     }
     public List<Posts> GetTargetPosts(SearchPost searchPost, String tag){
         List<PostData> rawPosts=readMapper.getTargetPosts(tag,searchPost.getSubtag());
@@ -102,7 +108,11 @@ public class PostService {
             posts.add(post);
 
         }
-        return posts;
+        List<Posts> sortedPosts = posts.stream()
+                .sorted(Comparator.comparing(Posts::getFavoriteNum).reversed())
+                .collect(Collectors.toList());
+
+        return sortedPosts;
 
     }
 

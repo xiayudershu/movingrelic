@@ -18,7 +18,9 @@ import org.xiayudeshu.pojo.vo.Posts;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LostService {
@@ -49,9 +51,38 @@ public class LostService {
             losts.add(lost);
 
         }
-        return losts;
+        List<Losts> sortedLosts = losts.stream()
+                .sorted(Comparator.comparing(Losts::getFavoriteNum).reversed())
+                .collect(Collectors.toList());
+
+        return sortedLosts;
     }
 
+    public List<Losts> GetTargetLosts(SearchLost searchLost){
+        List<LostData> rawLosts=readMapper.getTargetLosts(searchLost.getSearchWord());
+        List<Losts> losts=new ArrayList<>();
+        for (LostData rawData : rawLosts){
+            Losts lost = new Losts();
+            lost.setLostCreationId(rawData.getLostCreationId());
+            lost.setDate(rawData.getDate());
+            lost.setName(rawData.getName());
+            lost.setCentury(rawData.getCentury());
+
+            String[] pictureArray = rawData.getPictures().split(",");
+            String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
+            lost.setPicture(firstPicture);
+            lost.setFavoriteNum(readMapper.getLostFavouriteNum(rawData.getLostCreationId()));
+            losts.add(lost);
+
+        }
+
+        List<Losts> sortedLosts = losts.stream()
+                .sorted(Comparator.comparing(Losts::getFavoriteNum).reversed())
+                .collect(Collectors.toList());
+
+        return sortedLosts;
+
+    }
 
     public LostDetail getLostDetail(Long lostCreationId){
         LostDetail lostDetail=new LostDetail();

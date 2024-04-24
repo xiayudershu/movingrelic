@@ -39,6 +39,9 @@ public interface ReadMapper {
     @Select("select * from lost")
     List<LostData> getAllLosts();
 
+    @Select("SELECT * FROM lost WHERE inform LIKE CONCAT('%', #{searchWord}, '%') OR century LIKE CONCAT('%', #{searchWord}, '%')")
+    List<LostData> getTargetLosts(String searchWord);
+
 
     @Select("select * from post where post_id=#{postId}")
     PostData getAPost(Long postId);
