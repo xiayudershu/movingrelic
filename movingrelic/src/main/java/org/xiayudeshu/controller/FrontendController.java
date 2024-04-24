@@ -24,7 +24,6 @@ public class FrontendController {
     @Autowired
     private UserService userService;
 
-
     @PostMapping("/login")
     public Result UserLogIn(@RequestBody UserLogin userLogin){
         Long code= loginAndSetupService.UserLogin(userLogin);
