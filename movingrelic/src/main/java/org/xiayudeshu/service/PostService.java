@@ -79,6 +79,35 @@ public class PostService {
         }
         return posts;
     }
+    public List<Posts> GetTargetPost(SearchPost searchPost,String tag){
+        List<PostData> rawPosts=readMapper.getTargetPosts(tag,searchPost.getSubtag());
+        List<Posts> posts=new ArrayList<>();
+        for (PostData rawData : rawPosts){
+            Posts post = new Posts();
+            post.setPostId(rawData.getPostId());
+            post.setTime(rawData.getTime());
+            post.setTitle(rawData.getTitle());
+            post.setTime(rawData.getTime());
+            post.setTag(rawData.getTag());
+            String[] pictureArray = rawData.getPictures().split(",");
+            String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
+            post.setPicture(firstPicture);
+            List<String> subArray = Arrays.asList(rawData.getSubtag().split(","));
+            post.setSubtag(subArray);
+
+            post.setNeckName(readMapper.getNeckName(rawData.getUserId()));
+            post.setAvatar(readMapper.getAvatar(rawData.getUserId()));
+            post.setFavoriteNum(readMapper.getPostFavouriteNum(rawData.getPostId()));
+
+            posts.add(post);
+
+        }
+        return posts;
+
+    }
+
+
+
 
 
     public PostDetail getPostDetail(Long postId){

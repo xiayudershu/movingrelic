@@ -103,6 +103,18 @@ public class FrontendController {
         return Result.success();
     }
 
+    @PostMapping("/gettargetpost/usual")
+    public Result GetTargetPostUsual(@RequestBody SearchPost searchPost){
+        return Result.success(postService.GetTargetPost(searchPost,"帖子"));
+    }
+
+
+
+    @PostMapping("/gettargetpost/identify")
+    public Result GetTargetPostIdentify(@RequestBody SearchPost searchPost){
+        return Result.success(postService.GetTargetPost(searchPost,"鉴宝"));
+    }
+
 
 
 

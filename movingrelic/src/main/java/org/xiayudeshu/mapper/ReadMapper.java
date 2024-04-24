@@ -27,6 +27,9 @@ public interface ReadMapper {
     @Select("select * from post")
     List<PostData> getAllPosts();
 
+    @Select("SELECT * FROM post WHERE tag = #{tag} AND subtag LIKE CONCAT('%', #{subtag}, '%')")
+    List<PostData> getTargetPosts(String tag, String subtag);
+
     @Select("select * from creation")
     List<CreationData> getAllCreations();
 
