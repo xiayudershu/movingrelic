@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost/movingrelic
+    url: jdbc:mysql://101.35.20.149/movingrelic
     username: root
-    password: 20021211
+    password: 123456Qkx
     type: com.alibaba.druid.pool.DruidDataSource
   servlet:
     multipart:
