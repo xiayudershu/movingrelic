@@ -6,6 +6,11 @@ spring:
     password: 20021211
     type: com.alibaba.druid.pool.DruidDataSource
 
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+
+
+server:
+  port: 9090
