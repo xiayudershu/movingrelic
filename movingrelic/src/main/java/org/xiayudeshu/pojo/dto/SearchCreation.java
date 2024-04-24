@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchPost implements Serializable {
+public class SearchCreation implements Serializable {
     private Long userId;
-    private String subtag;
+    private String searchWord;
 }

@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.xiayudeshu.Result;
 import org.xiayudeshu.pojo.dto.*;
-import org.xiayudeshu.pojo.vo.Posts;
 import org.xiayudeshu.service.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/backend")
@@ -105,14 +102,14 @@ public class FrontendController {
 
     @PostMapping("/gettargetpost/usual")
     public Result GetTargetPostUsual(@RequestBody SearchPost searchPost){
-        return Result.success(postService.GetTargetPost(searchPost,"帖子"));
+        return Result.success(postService.GetTargetPosts(searchPost,"帖子"));
     }
 
 
 
     @PostMapping("/gettargetpost/identify")
     public Result GetTargetPostIdentify(@RequestBody SearchPost searchPost){
-        return Result.success(postService.GetTargetPost(searchPost,"鉴宝"));
+        return Result.success(postService.GetTargetPosts(searchPost,"鉴宝"));
     }
 
 
@@ -134,6 +131,12 @@ public class FrontendController {
     public Result GetCreations(){
         return Result.success(creationService.GetCreations());
     }
+
+    @PostMapping("/gettargetcreation")
+    public Result GetTargetCreation(@RequestBody SearchCreation searchCreation){
+        return Result.success(creationService.GetTargetCreations(searchCreation));
+    }
+
 
     @GetMapping("/getcreationdetail/{creationId}")
     public Result GetCreationDetail(@PathVariable Long creationId){

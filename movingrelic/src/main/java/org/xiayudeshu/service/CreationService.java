@@ -77,6 +77,28 @@ public class CreationService {
         return creations;
     }
 
+    public List<Creations> GetTargetCreations(SearchCreation searchCreation){
+        List<CreationData> rawCreations=readMapper.getTargetCreations(searchCreation.getSearchWord());
+        List<Creations> creations=new ArrayList<>();
+        for (CreationData rawData : rawCreations){
+            if(rawData.getIfPublic()==true){
+                Creations creation = new Creations();
+                creation.setCreationId(rawData.getCreationId());
+                creation.setTitle(rawData.getTitle());
+                creation.setTime(rawData.getTime());
+                String[] pictureArray = rawData.getPictures().split(",");
+                String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
+                creation.setPicture(firstPicture);
+
+                creation.setNeckName(readMapper.getNeckName(rawData.getUserId()));
+                creation.setAvatar(readMapper.getAvatar(rawData.getUserId()));
+                creation.setFavoriteNum(readMapper.getCreationFavouriteNum(rawData.getCreationId()));
+
+                creations.add(creation);
+            }
+        }
+        return creations;
+    }
 
     public CreationDetail getCreationDetail(Long creationId){
         CreationDetail creationDetail=new CreationDetail();

@@ -79,7 +79,7 @@ public class PostService {
         }
         return posts;
     }
-    public List<Posts> GetTargetPost(SearchPost searchPost,String tag){
+    public List<Posts> GetTargetPosts(SearchPost searchPost, String tag){
         List<PostData> rawPosts=readMapper.getTargetPosts(tag,searchPost.getSubtag());
         List<Posts> posts=new ArrayList<>();
         for (PostData rawData : rawPosts){

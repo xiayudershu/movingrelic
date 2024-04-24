@@ -30,6 +30,9 @@ public interface ReadMapper {
     @Select("SELECT * FROM post WHERE tag = #{tag} AND subtag LIKE CONCAT('%', #{subtag}, '%')")
     List<PostData> getTargetPosts(String tag, String subtag);
 
+    @Select("SELECT * FROM creation WHERE inform LIKE CONCAT('%', #{searchWord}, '%')")
+    List<CreationData> getTargetCreations(String searchWord);
+
     @Select("select * from creation")
     List<CreationData> getAllCreations();
 
