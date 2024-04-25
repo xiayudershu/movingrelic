@@ -14,10 +14,10 @@ public interface WriteMapper {
             "(#{neckName},#{userId},#{avatar},#{phone},#{sex},#{password})")
     void writeUser(String neckName,Long userId,String avatar,String phone,String sex,String password);
 
-    @Insert("insert into post (post_id,user_id,title,content,pictures,time,tag,subtag)" +
+    @Insert("insert into post (post_id,user_id,title,content,pictures,time,tag,subtag,favouriteNum)" +
             "values"+
-            "(#{postId},#{userId},#{title},#{content},#{pictures},#{time},#{tag},#{subtag})")
-    void writePost(Long postId, Long userId, String title, String content, String pictures, LocalDateTime time,String tag,String subtag);
+            "(#{postId},#{userId},#{title},#{content},#{pictures},#{time},#{tag},#{subtag},#{favouriteNum})")
+    void writePost(Long postId, Long userId, String title, String content, String pictures, LocalDateTime time,String tag,String subtag,Long favouriteNum);
 
     @Insert("insert into post_comment (post_id,user_id,comment_id,comment,time,parent_id)" +
             "values"+

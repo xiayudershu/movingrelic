@@ -2,6 +2,7 @@ package org.xiayudeshu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiayudeshu.mapper.DeletMapper;
+import org.xiayudeshu.mapper.EditMapper;
 import org.xiayudeshu.mapper.ReadMapper;
 import org.xiayudeshu.mapper.WriteMapper;
 import org.xiayudeshu.pojo.dto.*;
@@ -29,6 +30,9 @@ public class PostService {
     @Autowired
     private DeletMapper deletMapper;
 
+    @Autowired
+    private EditMapper editMapper;
+
     public Long AddPost(AddPost addPost){
         Long currentId= readMapper.getMaxPostid();
         PostData postData=new PostData();
@@ -42,6 +46,7 @@ public class PostService {
         postData.setTag(addPost.getTag());
         String subtags=String.join(",",addPost.getSubtag());
         postData.setSubtag(subtags);
+        postData.setFavouriteNum(0L);
         writeMapper.writePost(postData.getPostId(),
                 postData.getUserId(),
                 postData.getTitle(),
@@ -49,7 +54,8 @@ public class PostService {
                 postData.getPictures(),
                 postData.getTime(),
                 postData.getTag(),
-                postData.getSubtag()
+                postData.getSubtag(),
+                postData.getFavouriteNum()
         );
 
         return postData.getPostId();
@@ -66,6 +72,7 @@ public class PostService {
             post.setTitle(rawData.getTitle());
             post.setTime(rawData.getTime());
             post.setTag(rawData.getTag());
+            post.setFavoriteNum(rawData.getFavouriteNum());
             String[] pictureArray = rawData.getPictures().split(",");
             String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
             post.setPicture(firstPicture);
@@ -74,7 +81,7 @@ public class PostService {
 
             post.setNeckName(readMapper.getNeckName(rawData.getUserId()));
             post.setAvatar(readMapper.getAvatar(rawData.getUserId()));
-            post.setFavoriteNum(readMapper.getPostFavouriteNum(rawData.getPostId()));
+
 
             posts.add(post);
 
@@ -86,14 +93,15 @@ public class PostService {
         return sortedPosts;
     }
     public List<Posts> GetTargetPosts(SearchPost searchPost, String tag){
-        List<PostData> rawPosts=readMapper.getTargetPosts(tag,searchPost.getSubtag());
+        Integer offset = (searchPost.getCurrentPage() - 1) * searchPost.getPageSize();
+        List<PostData> rawPosts=readMapper.getTargetPosts(tag,searchPost.getSubtag(),searchPost.getPageSize(),offset);
         List<Posts> posts=new ArrayList<>();
         for (PostData rawData : rawPosts){
             Posts post = new Posts();
             post.setPostId(rawData.getPostId());
             post.setTime(rawData.getTime());
             post.setTitle(rawData.getTitle());
-            post.setTime(rawData.getTime());
+            post.setFavoriteNum(rawData.getFavouriteNum());
             post.setTag(rawData.getTag());
             String[] pictureArray = rawData.getPictures().split(",");
             String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
@@ -103,16 +111,13 @@ public class PostService {
 
             post.setNeckName(readMapper.getNeckName(rawData.getUserId()));
             post.setAvatar(readMapper.getAvatar(rawData.getUserId()));
-            post.setFavoriteNum(readMapper.getPostFavouriteNum(rawData.getPostId()));
 
             posts.add(post);
 
         }
-        List<Posts> sortedPosts = posts.stream()
-                .sorted(Comparator.comparing(Posts::getFavoriteNum).reversed())
-                .collect(Collectors.toList());
 
-        return sortedPosts;
+
+        return posts;
 
     }
 
@@ -183,11 +188,13 @@ public class PostService {
     public void LikePost(LikePost likePost){
         if(readMapper.getPostFavourite(likePost.getPostId(),likePost.getUserId())==0){
             writeMapper.LikePost(likePost.getPostId(),likePost.getUserId());
+            editMapper.updatePostFavouriteNum(likePost.getPostId(), readMapper.getPostFavouriteNum(likePost.getPostId()));
         }
     }
     public void DislikePost(LikePost likePost){
         if(readMapper.getPostFavourite(likePost.getPostId(),likePost.getUserId())==1){
             deletMapper.DislikePost(likePost.getPostId(),likePost.getUserId());
+            editMapper.updatePostFavouriteNum(likePost.getPostId(), readMapper.getPostFavouriteNum(likePost.getPostId()));
         }
 
 

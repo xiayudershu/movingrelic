@@ -27,11 +27,11 @@ public interface ReadMapper {
     @Select("select * from post")
     List<PostData> getAllPosts();
 
-    @Select("SELECT * FROM post WHERE tag = #{tag} AND subtag LIKE CONCAT('%', #{subtag}, '%')")
-    List<PostData> getTargetPosts(String tag, String subtag);
+    @Select("SELECT * FROM post WHERE tag = #{tag} AND subtag LIKE CONCAT('%', #{subtag}, '%') ORDER BY favouriteNum DESC LIMIT #{pageSize} OFFSET #{offset}")
+    List<PostData> getTargetPosts(String tag, String subtag,Integer pageSize,Integer offset);
 
-    @Select("SELECT * FROM creation WHERE inform LIKE CONCAT('%', #{searchWord}, '%')")
-    List<CreationData> getTargetCreations(String searchWord);
+    @Select("SELECT * FROM creation WHERE inform LIKE CONCAT('%', #{searchWord}, '%') ORDER BY favouriteNum DESC LIMIT #{pageSize} OFFSET #{offset}")
+    List<CreationData> getTargetCreations(String searchWord,Integer pageSize,Integer offset);
 
     @Select("select * from creation")
     List<CreationData> getAllCreations();
@@ -39,8 +39,10 @@ public interface ReadMapper {
     @Select("select * from lost")
     List<LostData> getAllLosts();
 
-    @Select("SELECT * FROM lost WHERE inform LIKE CONCAT('%', #{searchWord}, '%') OR century LIKE CONCAT('%', #{searchWord}, '%')")
-    List<LostData> getTargetLosts(String searchWord);
+    @Select("SELECT * FROM lost WHERE inform LIKE CONCAT('%', #{searchWord}, '%') OR century LIKE CONCAT('%', #{searchWord}, '%') ORDER BY favouriteNum DESC LIMIT #{pageSize} OFFSET #{offset}")
+    List<LostData> getTargetLosts(String searchWord,Integer pageSize,Integer offset);
+
+
 
 
     @Select("select * from post where post_id=#{postId}")

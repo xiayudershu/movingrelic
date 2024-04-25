@@ -21,4 +21,5 @@ public class CreationData implements Serializable {
     private Long userId;
     private LocalDateTime time;
     private Boolean ifPublic;
+    private Long favouriteNum;
 }

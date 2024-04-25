@@ -14,4 +14,6 @@ import java.io.Serializable;
 public class SearchCreation implements Serializable {
     private Long userId;
     private String searchWord;
+    private Integer pageSize;
+    private Integer currentPage;
 }

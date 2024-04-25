@@ -22,6 +22,7 @@ public class PostData implements Serializable{
     private LocalDateTime time;
     private String tag;
     private String subtag;
+    private Long favouriteNum;
 
 
 

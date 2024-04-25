@@ -14,4 +14,6 @@ import java.io.Serializable;
 public class SearchPost implements Serializable {
     private Long userId;
     private String subtag;
+    private Integer pageSize;
+    private Integer currentPage;
 }

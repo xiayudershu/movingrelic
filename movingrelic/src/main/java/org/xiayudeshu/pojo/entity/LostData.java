@@ -20,5 +20,5 @@ public class LostData implements Serializable {
     private String pictures;
     private String century;
     private LocalDate date;
-
+    private Long favouriteNum;
 }

@@ -3,6 +3,7 @@ package org.xiayudeshu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiayudeshu.mapper.DeletMapper;
+import org.xiayudeshu.mapper.EditMapper;
 import org.xiayudeshu.mapper.ReadMapper;
 import org.xiayudeshu.mapper.WriteMapper;
 import org.xiayudeshu.pojo.dto.*;
@@ -33,6 +34,9 @@ public class LostService {
     @Autowired
     private DeletMapper deletMapper;
 
+    @Autowired
+    private EditMapper editMapper;
+
 
     public List<Losts> GetLosts(){
         List<LostData> rawLosts=readMapper.getAllLosts();
@@ -59,7 +63,8 @@ public class LostService {
     }
 
     public List<Losts> GetTargetLosts(SearchLost searchLost){
-        List<LostData> rawLosts=readMapper.getTargetLosts(searchLost.getSearchWord());
+        Integer offset = (searchLost.getCurrentPage() - 1) * searchLost.getPageSize();
+        List<LostData> rawLosts=readMapper.getTargetLosts(searchLost.getSearchWord(),searchLost.getPageSize(),offset);
         List<Losts> losts=new ArrayList<>();
         for (LostData rawData : rawLosts){
             Losts lost = new Losts();
@@ -67,20 +72,17 @@ public class LostService {
             lost.setDate(rawData.getDate());
             lost.setName(rawData.getName());
             lost.setCentury(rawData.getCentury());
-
+            lost.setFavoriteNum(rawData.getFavouriteNum());
             String[] pictureArray = rawData.getPictures().split(",");
             String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
             lost.setPicture(firstPicture);
-            lost.setFavoriteNum(readMapper.getLostFavouriteNum(rawData.getLostCreationId()));
+
             losts.add(lost);
 
         }
 
-        List<Losts> sortedLosts = losts.stream()
-                .sorted(Comparator.comparing(Losts::getFavoriteNum).reversed())
-                .collect(Collectors.toList());
 
-        return sortedLosts;
+        return losts;
 
     }
 
@@ -141,11 +143,13 @@ public class LostService {
     public void LikeLost(LikeLost likeLost){
         if(readMapper.getLostFavourite(likeLost.getLostCreationId(),likeLost.getUserId())==0){
             writeMapper.LikeLost(likeLost.getLostCreationId(),likeLost.getUserId());
+            editMapper.updateLostFavouriteNum(likeLost.getLostCreationId(), readMapper.getLostFavouriteNum(likeLost.getLostCreationId()));
         }
     }
     public void DislikeLost(LikeLost likeLost){
         if(readMapper.getLostFavourite(likeLost.getLostCreationId(),likeLost.getUserId())==1){
             deletMapper.DislikeLost(likeLost.getLostCreationId(),likeLost.getUserId());
+            editMapper.updateLostFavouriteNum(likeLost.getLostCreationId(), readMapper.getLostFavouriteNum(likeLost.getLostCreationId()));
         }
 
 

@@ -4,6 +4,7 @@ package org.xiayudeshu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xiayudeshu.mapper.DeletMapper;
+import org.xiayudeshu.mapper.EditMapper;
 import org.xiayudeshu.mapper.ReadMapper;
 import org.xiayudeshu.mapper.WriteMapper;
 import org.xiayudeshu.pojo.dto.*;
@@ -34,6 +35,9 @@ public class CreationService {
     @Autowired
     private DeletMapper deletMapper;
 
+    @Autowired
+    private EditMapper editMapper;
+
     public Long AddCreation(AddCreation addCreation){
         Long currentId= readMapper.getMaxCreationid();
         CreationData creationData=new CreationData();
@@ -58,6 +62,7 @@ public class CreationService {
     }
 
     public List<Creations> GetCreations(){
+
         List<CreationData> rawCreations=readMapper.getAllCreations();
         List<Creations> creations=new ArrayList<>();
         for (CreationData rawData : rawCreations){
@@ -85,7 +90,8 @@ public class CreationService {
     }
 
     public List<Creations> GetTargetCreations(SearchCreation searchCreation){
-        List<CreationData> rawCreations=readMapper.getTargetCreations(searchCreation.getSearchWord());
+        Integer offset = (searchCreation.getCurrentPage() - 1) * searchCreation.getPageSize();
+        List<CreationData> rawCreations=readMapper.getTargetCreations(searchCreation.getSearchWord(),searchCreation.getPageSize(),offset);
         List<Creations> creations=new ArrayList<>();
         for (CreationData rawData : rawCreations){
             if(rawData.getIfPublic()==true){
@@ -93,22 +99,21 @@ public class CreationService {
                 creation.setCreationId(rawData.getCreationId());
                 creation.setTitle(rawData.getTitle());
                 creation.setTime(rawData.getTime());
+                creation.setFavoriteNum(rawData.getFavouriteNum());
                 String[] pictureArray = rawData.getPictures().split(",");
                 String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
                 creation.setPicture(firstPicture);
 
                 creation.setNeckName(readMapper.getNeckName(rawData.getUserId()));
                 creation.setAvatar(readMapper.getAvatar(rawData.getUserId()));
-                creation.setFavoriteNum(readMapper.getCreationFavouriteNum(rawData.getCreationId()));
+
 
                 creations.add(creation);
             }
         }
-        List<Creations> sortedCreations = creations.stream()
-                .sorted(Comparator.comparing(Creations::getFavoriteNum).reversed())
-                .collect(Collectors.toList());
 
-        return sortedCreations;
+
+        return creations;
     }
 
     public CreationDetail getCreationDetail(Long creationId){
@@ -170,11 +175,13 @@ public class CreationService {
     public void LikeCreation(LikeCreation likeCreation){
         if(readMapper.getCreationFavourite(likeCreation.getCreationId(),likeCreation.getUserId())==0){
             writeMapper.LikeCreation(likeCreation.getCreationId(),likeCreation.getUserId());
+            editMapper.updateCreationFavouriteNum(likeCreation.getCreationId(), readMapper.getCreationFavouriteNum(likeCreation.getCreationId()));
         }
     }
     public void DislikeCreation(LikeCreation likeCreation){
         if(readMapper.getCreationFavourite(likeCreation.getCreationId(),likeCreation.getUserId())==1){
             deletMapper.DislikeCreation(likeCreation.getCreationId(),likeCreation.getUserId());
+            editMapper.updateCreationFavouriteNum(likeCreation.getCreationId(), readMapper.getCreationFavouriteNum(likeCreation.getCreationId()));
         }
 
 

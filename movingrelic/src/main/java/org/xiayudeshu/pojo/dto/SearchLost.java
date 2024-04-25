@@ -15,4 +15,6 @@ import java.io.Serializable;
 public class SearchLost implements Serializable {
     private Long userId;
     private String searchWord;
+    private Integer pageSize;
+    private Integer currentPage;
 }
