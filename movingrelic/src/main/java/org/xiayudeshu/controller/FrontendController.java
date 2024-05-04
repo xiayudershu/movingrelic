@@ -56,7 +56,10 @@ public class FrontendController {
         return Result.success(userService.EditUserInform(editUserInform));
     }
 
-
+    @GetMapping("/getallstars/{userId}")
+    public Result GetALLStars(@PathVariable Long userId){
+        return Result.success(userService.GetALLStars(userId));
+    }
 
 
 

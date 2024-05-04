@@ -60,6 +60,17 @@ public interface ReadMapper {
     @Select("select avatar from user where user_id=#{userId}")
     String getAvatar(Long userId);
 
+    @Select("SELECT post_id FROM post_favourite WHERE user_id=#{userId}")
+    List<Long> getPostUserFavourite(Long userId);
+
+    @Select("SELECT lostcreation_id FROM lost_favourite WHERE user_id=#{userId}")
+    List<Long> getLostUserFavourite(Long userId);
+
+    @Select("SELECT creation_id FROM creation_favourite WHERE user_id=#{userId}")
+    List<Long> getCreationUserFavourite(Long userId);
+
+
+
 
     @Select("SELECT COUNT(*) AS favouriteNum FROM post_favourite WHERE post_id=#{postId}")
     Long getPostFavouriteNum(Long postId);

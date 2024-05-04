@@ -8,7 +8,18 @@ import org.xiayudeshu.mapper.EditMapper;
 import org.xiayudeshu.mapper.ReadMapper;
 import org.xiayudeshu.mapper.WriteMapper;
 import org.xiayudeshu.pojo.dto.EditUserInform;
+import org.xiayudeshu.pojo.entity.CreationData;
+import org.xiayudeshu.pojo.entity.LostData;
+import org.xiayudeshu.pojo.entity.PostData;
 import org.xiayudeshu.pojo.entity.UserData;
+import org.xiayudeshu.pojo.vo.Creations;
+import org.xiayudeshu.pojo.vo.Losts;
+import org.xiayudeshu.pojo.vo.Posts;
+import org.xiayudeshu.pojo.vo.Stars;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -67,6 +78,76 @@ public class UserService {
 
 
         return 1L;
+    }
+    public Stars GetALLStars(Long userId){
+        Stars stars=new Stars();
+        List<Long> postIds=readMapper.getPostUserFavourite(userId);
+        List<Long> lostIds=readMapper.getLostUserFavourite(userId);
+        List<Long> creationIds=readMapper.getCreationUserFavourite(userId);
+        //System.out.print(lostIds);
+        List<Posts> posts=new ArrayList<>();
+        List<Losts> losts=new ArrayList<>();
+        List<Creations> creations=new ArrayList<>();
+        for(Long postId : postIds){
+            PostData rawData=readMapper.getAPost(postId);
+            Posts post=new Posts();
+            post.setPostId(rawData.getPostId());
+            post.setTime(rawData.getTime());
+            post.setTitle(rawData.getTitle());
+            post.setTime(rawData.getTime());
+            post.setTag(rawData.getTag());
+            post.setFavoriteNum(rawData.getFavouriteNum());
+            String[] pictureArray = rawData.getPictures().split(",");
+            String firstPicture = pictureArray.length > 0 ? pictureArray[0] : "";
+            post.setPicture(firstPicture);
+            List<String> subArray = Arrays.asList(rawData.getSubtag().split(","));
+            post.setSubtag(subArray);
+            post.setNeckName(readMapper.getNeckName(rawData.getUserId()));
+            post.setAvatar(readMapper.getAvatar(rawData.getUserId()));
+            posts.add(post);
+
+        }
+        for(Long lostcreation : lostIds){
+            LostData rawData=readMapper.getALost(lostcreation);
+            Losts lost = new Losts();
+            lost.setLostCreationId(rawData.getLostCreationId());
+            lost.setDate(rawData.getDate());
+            lost.setName(rawData.getName());
+            lost.setCentury(rawData.getCentury());
+
+            String[] pictureArray = rawData.getPictures().split(",");
+            String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
+            lost.setPicture(firstPicture);
+            lost.setFavoriteNum(readMapper.getLostFavouriteNum(rawData.getLostCreationId()));
+            losts.add(lost);
+
+        }
+        for(Long creationId : creationIds){
+            CreationData rawData=readMapper.getACreation(creationId);
+
+                Creations creation = new Creations();
+                creation.setCreationId(rawData.getCreationId());
+                creation.setTitle(rawData.getTitle());
+                creation.setTime(rawData.getTime());
+                String[] pictureArray = rawData.getPictures().split(",");
+                String firstPicture = pictureArray.length > 0 ? pictureArray[0] : ""; // 获取第一个元素
+                creation.setPicture(firstPicture);
+
+                creation.setNeckName(readMapper.getNeckName(rawData.getUserId()));
+                creation.setAvatar(readMapper.getAvatar(rawData.getUserId()));
+                creation.setFavoriteNum(readMapper.getCreationFavouriteNum(rawData.getCreationId()));
+
+                creations.add(creation);
+
+
+        }
+
+        stars.setPost(posts);
+        stars.setLost(losts);
+        stars.setCreation(creations);
+
+        return stars;
+
     }
 
 
