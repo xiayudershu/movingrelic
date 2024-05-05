@@ -42,10 +42,10 @@ public interface WriteMapper {
     void LikeCreation(Long creationId, Long userId);
 
 
-    @Insert("insert into creation (creation_id,user_id,title,inform,pictures,time,if_public)" +
+    @Insert("insert into creation (creation_id,user_id,title,inform,pictures,time,if_public,favouriteNum)" +
             "values"+
-            "(#{creationId},#{userId},#{title},#{inform},#{pictures},#{time},#{ifPublic})")
-    void writeCreation(Long creationId, Long userId, String title, String inform, String pictures, LocalDateTime time,Boolean ifPublic);
+            "(#{creationId},#{userId},#{title},#{inform},#{pictures},#{time},#{ifPublic},#{favouriteNum})")
+    void writeCreation(Long creationId, Long userId, String title, String inform, String pictures, LocalDateTime time,Boolean ifPublic,Long favouriteNum);
 
 
     @Insert("insert into creation_comment (creation_id,user_id,comment_id,comment,time,parent_id)" +

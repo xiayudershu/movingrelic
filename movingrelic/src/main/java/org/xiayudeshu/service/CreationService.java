@@ -49,13 +49,16 @@ public class CreationService {
         creationData.setIfPublic(addCreation.getIfPublic());
         String pictures=String.join(",", addCreation.getPictures());
         creationData.setPictures(pictures);
+        creationData.setFavouriteNum(0L);
         writeMapper.writeCreation(creationData.getCreationId(),
                 creationData.getUserId(),
                 creationData.getTitle(),
                 creationData.getInform(),
                 creationData.getPictures(),
                 creationData.getTime(),
-                creationData.getIfPublic());
+                creationData.getIfPublic(),
+                creationData.getFavouriteNum()
+                );
 
         return creationData.getCreationId();
 

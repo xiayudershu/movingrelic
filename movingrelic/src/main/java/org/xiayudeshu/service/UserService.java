@@ -12,10 +12,7 @@ import org.xiayudeshu.pojo.entity.CreationData;
 import org.xiayudeshu.pojo.entity.LostData;
 import org.xiayudeshu.pojo.entity.PostData;
 import org.xiayudeshu.pojo.entity.UserData;
-import org.xiayudeshu.pojo.vo.Creations;
-import org.xiayudeshu.pojo.vo.Losts;
-import org.xiayudeshu.pojo.vo.Posts;
-import org.xiayudeshu.pojo.vo.Stars;
+import org.xiayudeshu.pojo.vo.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +28,20 @@ public class UserService {
 
     @Autowired
     private EditMapper editMapper;
+
+    public UserInform GetInform(Long userId){
+        UserInform userInform=new UserInform();
+        UserData userData=readMapper.getUserInform(userId);
+        userInform.setSex(userData.getSex());
+        userInform.setPhone(userData.getPhone());
+        userInform.setPassword(userData.getPassword());
+        userInform.setAvatar(userData.getAvatar());
+        userInform.setNeckName(userData.getNeckName());
+
+        return userInform;
+
+
+    }
 
 
     public Long EditUserInform(EditUserInform editUserInform){

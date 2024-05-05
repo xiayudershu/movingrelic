@@ -61,6 +61,10 @@ public class FrontendController {
         return Result.success(userService.GetALLStars(userId));
     }
 
+    @GetMapping("/getuserinform/{userId}")
+    public Result GetInform(@PathVariable Long userId){
+        return Result.success(userService.GetInform(userId));
+    }
 
 
 
