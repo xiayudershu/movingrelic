@@ -132,7 +132,7 @@ public class CreationService {
         creationDetail.setPicture(pictureList);
         creationDetail.setNeckName(readMapper.getNeckName(creationData.getUserId()));
         creationDetail.setAvatar(readMapper.getAvatar(creationData.getUserId()));
-        creationDetail.setFavoriteNum(readMapper.getCreationCommentNum(creationId));
+        creationDetail.setFavoriteNum(creationData.getFavouriteNum());
         creationDetail.setCommentNum(readMapper.getCreationCommentNum(creationId));
 
 

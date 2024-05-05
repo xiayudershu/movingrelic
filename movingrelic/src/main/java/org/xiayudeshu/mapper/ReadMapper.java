@@ -30,8 +30,8 @@ public interface ReadMapper {
     @Select("SELECT * FROM post WHERE tag = #{tag} AND subtag LIKE CONCAT('%', #{subtag}, '%') ORDER BY favouriteNum DESC LIMIT #{pageSize} OFFSET #{offset}")
     List<PostData> getTargetPosts(String tag, String subtag,Integer pageSize,Integer offset);
 
-    @Select("SELECT * FROM creation WHERE inform LIKE CONCAT('%', #{searchWord}, '%') ORDER BY favouriteNum DESC LIMIT #{pageSize} OFFSET #{offset}")
-    List<CreationData> getTargetCreations(String searchWord,Integer pageSize,Integer offset);
+    @Select("SELECT * FROM creation WHERE inform LIKE CONCAT('%', #{searchWord}, '%') AND if_public=true ORDER BY favouriteNum DESC LIMIT #{pageSize} OFFSET #{offset}")
+    List<CreationData> getTargetCreations(String searchWord, Integer pageSize, Integer offset);
 
     @Select("select * from creation")
     List<CreationData> getAllCreations();
