@@ -20,3 +20,4 @@ server:
 
 storage:
   path: C:\Users\14157\Desktop\计算机设计大赛\movingrelic\movingrelic\src\main\resources\static\
+  aipath: C:\Users\14157\Desktop\计算机设计大赛\movingrelic\movingrelic\src\main\resources\static\

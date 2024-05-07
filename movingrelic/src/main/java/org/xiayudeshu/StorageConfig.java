@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("storage")
 public class StorageConfig {
     private String path;
+    private String aipath;
 }

@@ -25,5 +25,8 @@ public class config implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:" + storageConfig.getPath());
+        registry.addResourceHandler("/aiimages/**")
+                .addResourceLocations("file:" + storageConfig.getAipath());
+
     }
 }
